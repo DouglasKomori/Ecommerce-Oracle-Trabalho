@@ -1,21 +1,19 @@
 var mysql = require('mysql2');
+require('dotenv').config();
 
 class Database {
-
     #conexao;
 
     get conexao() { return this.#conexao;} 
     set conexao(conexao) { this.#conexao = conexao; }
 
     constructor() {
-
         this.#conexao = mysql.createPool({
-            host: '140.238.185.50',
-            database: 'DB_106888',
-            user: '106888',
-            password: '106888',
+            host: process.env.DB_HOST,
+            database: process.env.DB_NAME,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
         });
-        
     }
 
     ExecutaComando(sql, valores) {
