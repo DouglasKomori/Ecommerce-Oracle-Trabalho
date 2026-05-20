@@ -1,0 +1,79 @@
+<link href="/css/Usuarios/criar.css" >
+
+<style>
+    .campoErro {
+        border-color: red;
+    }
+</style>
+
+<script src="/js/Usuarios/alterar.js"></script>
+
+<h1>Alterar usuário</h1>
+
+<div>
+    <div class="alert alert-danger" role="alert" id="erros" style="display:none">
+
+    </div>
+    <div class="alert alert-success" role="alert" id="alertaSucesso" style="display:none;" >
+        
+      </div>
+    <form>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="hidden" id="inputId" value="<%= usuAlteracao.usuarioId %>">
+            <label for="inputNome">Nome</label>
+            <input value="<%= usuAlteracao.usuarioNome %>" type="text" class="form-control" id="inputNome">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputEmail">Email</label>
+            <input value="<%= usuAlteracao.usuarioEmail %>" type="email" class="form-control" id="inputEmail">
+          </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputSenha">Senha</label>
+                    <input value="<%= usuAlteracao.usuarioSenha %>" type="password" class="form-control" id="inputSenha">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputConfSenha">Confirmar senha</label>
+                    <input value="<%= usuAlteracao.usuarioSenha %>" type="password" class="form-control" id="inputConfSenha">
+                </div>
+            </div>  
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="selPerfil">Perfil</label>
+                    <select class="form-control" id="selPerfil">
+                        <option value="0">--Selecione--</option>
+                        <% for(let i = 0; i < lista.length; i++)  { 
+                            if(lista[i].perfilId == usuAlteracao.perfilId) { %>
+                                <option selected value="<%= lista[i].perfilId %>"><%= lista[i].perfilNome %></option>
+                            <% } else { %>
+                                <option value="<%= lista[i].perfilId %>"><%= lista[i].perfilNome %></option>
+                            <% } %>                     
+                        <% } %>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <% if (usuAlteracao.usuarioAtivo == "S"){ %>
+                            <input checked class="form-check-input" type="checkbox" id="cbAtivo">
+                         <% } else { %>  
+                            <input class="form-check-input" type="checkbox" id="cbAtivo">
+                        <% } %>
+                        <label class="form-check-label" for="cbAtivo">
+                          Ativo
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <button type="button" id="btnAlterarUsuario" class="btn btn-primary">Gravar</button>
+        <a class="btn btn-secondary" href="/admin/usuarios">Voltar</a>
+      </form>
+</div>

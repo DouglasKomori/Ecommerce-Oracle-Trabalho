@@ -1,0 +1,70 @@
+<link href="/css/Usuarios/criar.css" >
+
+<style>
+    .campoErro {
+        border-color: red;
+    }
+</style>
+
+<script src="/js/Usuarios/criar.js"></script>
+
+<h1>Criar novo usuário</h1>
+
+<div>
+    <div class="alert alert-danger" role="alert" id="erros" style="display:none">
+
+    </div>
+    <div class="alert alert-success" role="alert" id="alertaSucesso" style="display:none;" >
+        
+      </div>
+    <form>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputNome">Nome</label>
+            <input type="text" class="form-control" id="inputNome">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputEmail">Email</label>
+            <input type="email" class="form-control" id="inputEmail">
+          </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputSenha">Senha</label>
+                    <input type="password" class="form-control" id="inputSenha">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputConfSenha">Confirmar senha</label>
+                    <input type="password" class="form-control" id="inputConfSenha">
+                </div>
+            </div>  
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="selPerfil">Perfil</label>
+                    <select class="form-control" id="selPerfil">
+                        <option value="0">--Selecione--</option>
+                        <% for(let i = 0; i < lista.length; i++)  { %>
+                            <option value="<%= lista[i].perfilId %>"><%= lista[i].perfilNome %></option>
+                        <% } %>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="cbAtivo">
+                        <label class="form-check-label" for="cbAtivo">
+                          Ativo
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <button type="button" id="btnGravarUsuario" class="btn btn-primary">Gravar</button>
+        <a class="btn btn-secondary" href="/admin/usuarios">Voltar</a>
+      </form>
+</div>
