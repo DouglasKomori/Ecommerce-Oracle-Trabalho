@@ -33,7 +33,6 @@ class ProdutoRoute {
             storage: multerS3({
                 s3: s3,
                 bucket: process.env.OCI_BUCKET_NAME,
-                acl: 'public-read', 
                 key: function (req, file, cb) {
                     var ext = file.originalname.split(".")[1];
                     cb(null, Date.now().toString() + "." + ext);
