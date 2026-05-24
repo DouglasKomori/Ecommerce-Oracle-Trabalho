@@ -1,7 +1,7 @@
+const { S3Client } = require('@aws-sdk/client-s3');
 const express = require('express');
 const multer = require("multer");
 const multerS3 = require('multer-s3');
-const aws = require('aws-sdk');
 const ProdutoController = require('../controllers/produtoController');
 const Autenticacao = require('../middlewares/autenticacao');
 require('dotenv').config();
@@ -18,14 +18,14 @@ class ProdutoRoute {
 
     constructor() {
         this.#router = express.Router();
-
-        const ep = new aws.Endpoint(`https://${process.env.OCI_NAMESPACE}.compat.objectstorage.${process.env.OCI_REGION}.oraclecloud.com`);
-        const s3 = new aws.S3({
-            endpoint: ep,
+        
+        const s3 = new S3Client({
             region: process.env.OCI_REGION,
-            accessKeyId: process.env.OCI_ACCESS_KEY,
-            secretAccessKey: process.env.OCI_SECRET_KEY,
-            signatureVersion: 'v4'
+            endpoint: `https://${process.env.OCI_NAMESPACE}.compat.objectstorage.${process.env.OCI_REGION}.oraclecloud.com`,
+            credentials: {
+                accessKeyId: process.env.OCI_ACCESS_KEY,
+                secretAccessKey: process.env.OCI_SECRET_KEY
+            }
         });
 
         let upload = multer({
