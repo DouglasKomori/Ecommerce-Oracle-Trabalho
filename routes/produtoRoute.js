@@ -1,4 +1,4 @@
-const { S3Client } = require('@aws-sdk/client-s3');
+const AWS = require('aws-sdk');
 const express = require('express');
 const multer = require("multer");
 const multerS3 = require('multer-s3');
@@ -19,23 +19,22 @@ class ProdutoRoute {
     constructor() {
         this.#router = express.Router();
 
-        const s3 = new S3Client({
-            region: process.env.OCI_REGION,
+        const s3 = new AWS.S3({
             endpoint: `https://${process.env.OCI_NAMESPACE}.compat.objectstorage.${process.env.OCI_REGION}.oraclecloud.com`,
-            forcePathStyle: true,
-            credentials: {
-                accessKeyId: process.env.OCI_ACCESS_KEY,
-                secretAccessKey: process.env.OCI_SECRET_KEY
-            }
+            accessKeyId: process.env.OCI_ACCESS_KEY,
+            secretAccessKey: process.env.OCI_SECRET_KEY,
+            region: process.env.OCI_REGION,
+            s3ForcePathStyle: true,
+            signatureVersion: 'v4'
         });
 
-        let upload = multer({
+        const upload = multer({
             storage: multerS3({
                 s3: s3,
                 bucket: process.env.OCI_BUCKET_NAME,
-                key: function (req, file, cb) {
-                    var ext = file.originalname.split(".").pop();
-                    cb(null, Date.now().toString() + "." + ext);
+                key: function(req, file, cb) {
+                    var ext = file.originalname.split('.').pop();
+                    cb(null, Date.now().toString() + '.' + ext);
                 }
             })
         });
