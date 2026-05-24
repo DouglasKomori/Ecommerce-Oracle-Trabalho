@@ -85,16 +85,18 @@ class ProdutoModel {
 
             let prdImagem = row["prd_imagem"];
             if(prdImagem != null && prdImagem != ""){
-                //checar se existe
-                if(fs.existsSync(global.RAIZ_PROJETO + "/public" + global.PRODUTO_IMG_CAMINHO + prdImagem) == false) {
-                    prdImagem = "sem-imagem.png";
+                if(prdImagem.startsWith('http')) {
+                } else {
+                    if(fs.existsSync(global.RAIZ_PROJETO + "/public" + global.PRODUTO_IMG_CAMINHO + prdImagem) == false) {
+                        prdImagem = global.PRODUTO_IMG_CAMINHO + "sem-imagem.png";
+                    } else {
+                        prdImagem = global.PRODUTO_IMG_CAMINHO + prdImagem;
+                    }
                 }
             }
             else {
-                prdImagem = "sem-imagem.png"
+                prdImagem = global.PRODUTO_IMG_CAMINHO + "sem-imagem.png";
             }
-
-            prdImagem = global.PRODUTO_IMG_CAMINHO + prdImagem;
             produto = new ProdutoModel(row['prd_id'], 
             row['prd_cod'], row['prd_nome'], row['prd_quantidade'], 
             row['cat_id'], row['mar_id'], row["cat_nome"], row["mar_nome"], 
@@ -119,13 +121,18 @@ class ProdutoModel {
 
                 let prdImagem = row["prd_imagem"];
                 if(prdImagem != null && prdImagem != ""){
-                    //checar se existe
-                    if(fs.existsSync(global.RAIZ_PROJETO + "/public" + global.PRODUTO_IMG_CAMINHO + prdImagem) == false) {
-                        prdImagem = "sem-imagem.png";
+                    if(prdImagem.startsWith('http')) {
+                        // URL do S3/OCI — usar diretamente
+                    } else {
+                        if(fs.existsSync(global.RAIZ_PROJETO + "/public" + global.PRODUTO_IMG_CAMINHO + prdImagem) == false) {
+                            prdImagem = global.PRODUTO_IMG_CAMINHO + "sem-imagem.png";
+                        } else {
+                            prdImagem = global.PRODUTO_IMG_CAMINHO + prdImagem;
+                        }
                     }
                 }
                 else {
-                    prdImagem = "sem-imagem.png"
+                    prdImagem = global.PRODUTO_IMG_CAMINHO + "sem-imagem.png";
                 }
 
                 listaRetorno.push(new ProdutoModel(row['prd_id'], 

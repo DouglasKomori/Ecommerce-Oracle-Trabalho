@@ -52,7 +52,9 @@
 
         <div class="form-group">
           <label>Imagem do produto</label>
+          <input type="hidden" id="imagemAtual" value="<%= produtoAlter.produtoImagem %>">
           <input class="form-control" type="file" id="inputImagem">
+          <small class="text-muted">Deixe em branco para manter a imagem atual</small>
 
           <div>
             <img style="width:200px" src="<%= produtoAlter.produtoImagem %>" id="imgInput" alt="Imagem do produto">

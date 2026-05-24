@@ -37,11 +37,16 @@ class ProdutoController {
 
     async excluirProduto(req, res){
         var ok = true;
-        if(req.body.codigo != "") {
-            let produto = new ProdutoModel();
-            ok = await produto.excluir(req.body.codigo);
-        }
-        else{
+        try {
+            if(req.body.codigo != "") {
+                let produto = new ProdutoModel();
+                ok = await produto.excluir(req.body.codigo);
+            }
+            else{
+                ok = false;
+            }
+        } catch(e) {
+            console.error("Erro ao excluir produto:", e);
             ok = false;
         }
 
@@ -50,14 +55,22 @@ class ProdutoController {
 
     async cadastrarProduto(req, res){
         var ok = true;
-        
-        if(req.body.codigo != "" && req.body.nome != "" && req.body.quantidade != "" && req.body.quantidade  != '0' && req.body.marca != '0' && req.body.categoria  != '0' && req.file != null && (req.file.originalname.includes(".jpg") || req.file.originalname.includes(".png")) && req.body.preco != '' && req.body.preco > '0' ) {
-            
-            let produto = new ProdutoModel(0, req.body.codigo, req.body.nome, req.body.quantidade, req.body.categoria, req.body.marca, "", "", req.file.location, req.body.preco);
+        try {
+            if(req.uploadError) {
+                return res.send({ ok: false, msg: req.uploadError });
+            }
 
-            ok = await produto.gravar();
-        }
-        else{
+            if(req.body.codigo != "" && req.body.nome != "" && req.body.quantidade != "" && req.body.quantidade  != '0' && req.body.marca != '0' && req.body.categoria  != '0' && req.file != null && (req.file.originalname.includes(".jpg") || req.file.originalname.includes(".png")) && req.body.preco != '' && req.body.preco > '0' ) {
+
+                let produto = new ProdutoModel(0, req.body.codigo, req.body.nome, req.body.quantidade, req.body.categoria, req.body.marca, "", "", req.file.location, req.body.preco);
+
+                ok = await produto.gravar();
+            }
+            else{
+                ok = false;
+            }
+        } catch(e) {
+            console.error("Erro ao cadastrar produto:", e);
             ok = false;
         }
 
@@ -80,14 +93,27 @@ class ProdutoController {
 
     async alterarProduto(req, res) {
         var ok = true;
-        
-        if(req.body.codigo != "" && req.body.nome != "" && req.body.quantidade != "" && req.body.quantidade  != '0' && req.body.marca != '0' && req.body.categoria  != '0' && req.file != null && (req.file.originalname.includes(".jpg") || req.file.originalname.includes(".png"))  && req.body.preco != '' && req.body.preco > '0' ) {
+        try {
+            if(req.uploadError) {
+                return res.send({ ok: false, msg: req.uploadError });
+            }
 
-            let produto = new ProdutoModel(req.body.id, req.body.codigo, req.body.nome, req.body.quantidade, req.body.categoria, req.body.marca, "", "", req.file.location, req.body.preco);
-            
-            ok = await produto.gravar();
-        }
-        else{
+            const temArquivo = req.file != null;
+            const arquivoValido = !temArquivo || (req.file.originalname.includes(".jpg") || req.file.originalname.includes(".png"));
+
+            if(req.body.codigo != "" && req.body.nome != "" && req.body.quantidade != "" && req.body.quantidade != '0' && req.body.marca != '0' && req.body.categoria != '0' && arquivoValido && req.body.preco != '' && req.body.preco > '0') {
+
+                let imagem = temArquivo ? req.file.location : req.body.imagemAtual;
+
+                let produto = new ProdutoModel(req.body.id, req.body.codigo, req.body.nome, req.body.quantidade, req.body.categoria, req.body.marca, "", "", imagem, req.body.preco);
+
+                ok = await produto.gravar();
+            }
+            else{
+                ok = false;
+            }
+        } catch(e) {
+            console.error("Erro ao alterar produto:", e);
             ok = false;
         }
 

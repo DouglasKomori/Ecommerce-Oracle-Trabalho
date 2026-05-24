@@ -34,21 +34,31 @@ class ProdutoRoute {
                 s3: s3,
                 bucket: process.env.OCI_BUCKET_NAME,
                 key: function (req, file, cb) {
-                    var ext = file.originalname.split(".")[1];
+                    var ext = file.originalname.split(".").pop();
                     cb(null, Date.now().toString() + "." + ext);
                 }
             })
         });
+
+        const safeUpload = (req, res, next) => {
+            upload.single("inputImagem")(req, res, (err) => {
+                if (err) {
+                    console.error("Erro no upload S3:", err.message);
+                    req.uploadError = err.message || "Erro ao fazer upload da imagem";
+                }
+                next();
+            });
+        };
 
         let auth = new Autenticacao();
         let ctrl = new ProdutoController();
 
         this.#router.get('/', auth.usuarioIsAdmin, ctrl.listarView);
         this.#router.get('/cadastro', auth.usuarioIsAdmin, ctrl.cadastroView);
-        this.#router.post("/cadastro", auth.usuarioIsAdmin, upload.single("inputImagem"), ctrl.cadastrarProduto);
+        this.#router.post("/cadastro", auth.usuarioIsAdmin, safeUpload, ctrl.cadastrarProduto);
         this.#router.post("/excluir", auth.usuarioIsAdmin, ctrl.excluirProduto);
         this.#router.get("/alterar/:id", auth.usuarioIsAdmin, ctrl.alterarView);
-        this.#router.post("/alterar", auth.usuarioIsAdmin, upload.single("inputImagem"), ctrl.alterarProduto);
+        this.#router.post("/alterar", auth.usuarioIsAdmin, safeUpload, ctrl.alterarProduto);
         this.#router.post("/buscar", ctrl.buscaProduto);
     }
 }
