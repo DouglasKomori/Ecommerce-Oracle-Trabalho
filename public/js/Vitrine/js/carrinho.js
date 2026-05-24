@@ -23,36 +23,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function gravarPedido() {
     let carrinho = localStorage.getItem('carrinho');
+    
+    let emailCliente = document.getElementById("emailCliente").value;
 
     if(carrinho != null && carrinho != ''){
+        
+        if(!emailCliente || emailCliente.trim() === "") {
+            alert("Por favor, informe seu e-mail para receber o comprovante do pedido!");
+            return;
+        }
+
+        let dadosParaEnviar = {
+            email: emailCliente,
+            carrinho: JSON.parse(carrinho)
+        };
 
         fetch('/gravar-pedido', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: carrinho
+            body: JSON.stringify(dadosParaEnviar)
         })
         .then(r => {
             return r.json();
         })
         .then(function(r) {
             if(r.ok){
-                alert("Pedido gravado com sucesso");
-                //remove tudo do localStorage
-                //localStorage.clear();
-                //remove apenas uma chave com seu valor do local
+                alert("Pedido gravado com sucesso! Verifique sua caixa de e-mail.");
+
                 localStorage.removeItem('carrinho');
                 document.getElementById("valorTotalCarrinho").innerHTML = "";
                 document.getElementById("corpoTabelaCarrinho").innerHTML = "";
                 document.getElementById("contadorCarrinho").innerText = 0;
+                document.getElementById("emailCliente").value = ""; 
             }
             else{
                 alert(r.msg);
             }
         })
         .catch(function(e) {
-
+            console.error("Erro ao gravar pedido:", e);
         })
     }
     else{

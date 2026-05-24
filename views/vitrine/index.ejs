@@ -131,11 +131,16 @@
                         </div>
                         <div class="modal-footer" style="display:block;">
                             <div id="valorTotalCarrinho" style="text-align:end;">
-                                
                             </div>
                             <hr>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                            <button type="button" id="btnGravarPedido" class="btn btn-primary">Confirmar</button>
+                            <div class="mb-3 text-start">
+                                <label for="emailCliente" class="form-label fw-bold">E-mail para receber o comprovante:</label>
+                                <input type="email" class="form-control" id="emailCliente" placeholder="Digite seu e-mail" required>
+                            </div>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                <button type="button" id="btnGravarPedido" class="btn btn-primary">Confirmar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
