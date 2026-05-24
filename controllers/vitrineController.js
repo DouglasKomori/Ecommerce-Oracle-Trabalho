@@ -65,11 +65,17 @@ class VitrineController {
 
                         if(ok && emailCliente !== "") {
                             try {
+                                const itensDetalhados = listaPedido.map(item => ({
+                                    nome: item.nome || 'Produto',
+                                    quantidade: item.quantidade,
+                                    preco: parseFloat(item.preco) || 0
+                                }));
+
                                 const dadosEmail = {
                                     emailCliente: emailCliente,
                                     numero: pedido.pedidoId,
                                     total: valorTotalPedido.toFixed(2),
-                                    itens: `Seu pedido contém ${listaPedido.length} tipo(s) de produto(s).`
+                                    itens: itensDetalhados
                                 };
 
                                 await queueClient.putMessages({

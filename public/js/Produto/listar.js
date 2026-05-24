@@ -30,7 +30,7 @@ function excluirProduto() {
                     window.location.reload();
                 }
                 else{
-                    alert("Erro ao excluir produto");
+                    alert(r.msg || "Erro ao excluir produto");
                 }
             })
             .catch(e => {

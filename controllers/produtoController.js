@@ -37,6 +37,7 @@ class ProdutoController {
 
     async excluirProduto(req, res){
         var ok = true;
+        var msg = "";
         try {
             if(req.body.codigo != "") {
                 let produto = new ProdutoModel();
@@ -44,13 +45,19 @@ class ProdutoController {
             }
             else{
                 ok = false;
+                msg = "Código inválido";
             }
         } catch(e) {
             console.error("Erro ao excluir produto:", e);
             ok = false;
+            if(e.code === 'ER_ROW_IS_REFERENCED_2') {
+                msg = "Não é possível excluir: produto possui pedidos vinculados";
+            } else {
+                msg = "Erro ao excluir produto";
+            }
         }
 
-        res.send({ok: ok});
+        res.send({ok: ok, msg: msg});
     }
 
     async cadastrarProduto(req, res){
