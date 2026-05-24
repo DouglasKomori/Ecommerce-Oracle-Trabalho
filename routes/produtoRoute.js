@@ -18,10 +18,11 @@ class ProdutoRoute {
 
     constructor() {
         this.#router = express.Router();
-        
+
         const s3 = new S3Client({
             region: process.env.OCI_REGION,
             endpoint: `https://${process.env.OCI_NAMESPACE}.compat.objectstorage.${process.env.OCI_REGION}.oraclecloud.com`,
+            forcePathStyle: true,
             credentials: {
                 accessKeyId: process.env.OCI_ACCESS_KEY,
                 secretAccessKey: process.env.OCI_SECRET_KEY
